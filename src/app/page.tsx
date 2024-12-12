@@ -10,6 +10,8 @@ import courseService, { CourseType } from "@/services/courseService"
 import { GetStaticProps } from "next"
 import { ReactNode, useEffect, useState } from "react"
 import Footer from "@/components/common/footer"
+import AOS from "aos"
+import "aos/dist/aos.css"
 
 
 
@@ -19,6 +21,9 @@ const HomeNoAuth = () => {
 
   useEffect(() => {
     const fetchCourses = async () => {
+
+      AOS.init()
+
       try {
         const res = await courseService.getNewestCourses();
         setCourses(res.data);
@@ -41,13 +46,18 @@ const HomeNoAuth = () => {
       </Head>
       <main>
 
-        <div className={styles.sectionBackground}>
+        <div className={styles.sectionBackground} data-aos="fade-zoom-in" data-aos-duration="1600">
           <HeaderHomeNoAuth />
           <PresentationSection />
         </div>
+        
+        <div data-aos="fade-right" data-aos-duration="1200">
+          <CardsSection />
+        </div>
 
-        <CardsSection />
-        <SlideSection newestCourses={course} />
+        <div data-aos="fade-up" data-aos-duration="1350">
+          <SlideSection newestCourses={course} />
+        </div>
 
         <Footer />
 
