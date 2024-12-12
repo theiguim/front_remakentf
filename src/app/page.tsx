@@ -1,10 +1,10 @@
+"use client"
+
 import Head from "next/head"
 import styles from "../styles/HomeNoAuth.module.scss"
-
-export const metadata = {
-  title: "Página inicial",
-  description: "Bem-vindo à página do meu site"
-}
+import HeaderHomeNoAuth from "@/components/homeNoAuth/headerHomeNoAuth"
+import PresentationSection from "@/components/homeNoAuth/presentationSection"
+import CardsSection from "@/components/homeNoAuth/cardsSection"
 
 const HomeNoAuth = () => {
 
@@ -12,9 +12,24 @@ const HomeNoAuth = () => {
     <>
 
       <Head>
-        <title>Home</title>
+        <title>Onebitflix</title>
+        <link rel="shortcut icon" href="/favicon" type="image/x-icon" />
+        <meta property="og:title" content="Onebitflix" key="title" />
+        <meta name="description" content="Tenha acesso aos melhores conteúdos de programaão de uma forma simples e fácil!" />
       </Head>
-      <main></main>
+      <main>
+
+        <div className={styles.sectionBackground}>
+          <HeaderHomeNoAuth />
+          <PresentationSection />
+        </div>
+
+        <CardsSection />
+
+
+
+
+      </main>
 
     </>
   )
