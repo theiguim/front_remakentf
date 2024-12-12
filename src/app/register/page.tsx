@@ -5,8 +5,39 @@ import styles from "../../styles/registerLogin.module.scss"
 import Head from "next/head"
 import { Container, Button, Form, FormGroup, Label, Input } from "reactstrap"
 import Footer from "@/components/common/footer"
+import { useEffect } from "react"
+import { FormEvent } from "react"
+import authService from "@/services/authService"
 
 const Register = () => {
+
+    const handlerResgister = async(e: FormEvent<HTMLFormElement>)=>{
+        e.preventDefault()
+
+        const formData = new FormData(e.currentTarget)
+        const firstName = formData.get("firstName")!.toString()
+        const lastName = formData.get("lastName")!.toString()
+        const phone = formData.get("phone")!.toString()
+        const birth = formData.get("birth")!.toString()
+        const email = formData.get("email")!.toString()
+        const password = formData.get("password")!.toString()
+        const confirmPassword = formData.get("confirmPassword")!.toString()
+
+        const params = {firstName, lastName, phone, birth, email, password};
+
+        if(password != confirmPassword){
+            alert("A senha e confirmação são diferentes!")
+            return
+        }
+
+        const {data, status} = await authService.register(params)
+
+        if(status === 201 || status === 200){
+            alert("Sucesso no cadastro.")
+        }else{
+            alert(data.message)
+        }
+    }
 
     return (
         <>
@@ -23,7 +54,7 @@ const Register = () => {
                 <Container className="py-5">
                     <p className={styles.formTitle}><strong>Bem-vindo(a) ao Onebitflix!</strong></p>
 
-                    <Form className={styles.form}>
+                    <Form className={styles.form} onSubmit={handlerResgister}>
                         <p className="text-center"><strong>Faça a sua conta!</strong></p>
                         <FormGroup>
                             <Label for="firstName" className={styles.name}>NOME</Label>
@@ -46,7 +77,7 @@ const Register = () => {
                                 placeholder="Qual o seu sobrenome?"
                                 required
                                 maxLength={20}
-                                className={styles.input} />
+                                className={styles.inputName} />
                         </FormGroup>
 
                         <FormGroup>
@@ -100,10 +131,10 @@ const Register = () => {
                         </FormGroup>
 
                         <FormGroup>
-                            <Label for="password" className={styles.name}>CONFIRME SUA SENHA</Label>
+                            <Label for="confirmPassword" className={styles.name}>CONFIRME SUA SENHA</Label>
                             <Input
-                                id="password"
-                                name="password"
+                                id="confirmPassword"
+                                name="confirmPassword"
                                 type="password"
                                 placeholder="Confirme a sua senha"
                                 required
