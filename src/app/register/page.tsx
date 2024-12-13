@@ -5,13 +5,21 @@ import styles from "../../styles/registerLogin.module.scss"
 import Head from "next/head"
 import { Container, Button, Form, FormGroup, Label, Input } from "reactstrap"
 import Footer from "@/components/common/footer"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { FormEvent } from "react"
 import authService from "@/services/authService"
+import { useRouter } from "next/navigation";
+import ToastComponent from "@/components/common/toast"
 
 const Register = () => {
+    const router = useRouter()
+    const [toastIsOpen, setToastIsOpen] = useState(false)
+    const [toastMessage, setToastMessage] = useState("")
 
-    const handlerResgister = async(e: FormEvent<HTMLFormElement>)=>{
+
+
+    const handlerResgister = async (e: FormEvent<HTMLFormElement>) => {
+
         e.preventDefault()
 
         const formData = new FormData(e.currentTarget)
@@ -23,19 +31,28 @@ const Register = () => {
         const password = formData.get("password")!.toString()
         const confirmPassword = formData.get("confirmPassword")!.toString()
 
-        const params = {firstName, lastName, phone, birth, email, password};
+        const params = { firstName, lastName, phone, birth, email, password };
 
-        if(password != confirmPassword){
-            alert("A senha e confirmação são diferentes!")
+        if (password != confirmPassword) {
+            setToastIsOpen(true)
+            setTimeout(()=>{
+                setToastIsOpen(false)
+            }, 3000)
+            setToastMessage("Senha e confirmação diferentes.")
             return
         }
 
-        const {data, status} = await authService.register(params)
+        const { data, status } = await authService.register(params)
 
-        if(status === 201 || status === 200){
-            alert("Sucesso no cadastro.")
-        }else{
-            alert(data.message)
+        if (status === 201 || status === 200) {
+            router.push("/login?registred=true")
+        } else {
+            setToastIsOpen(true)
+            setTimeout(()=>{
+                setToastIsOpen(false)
+            }, 3000)
+            setToastMessage(data.message)
+            return
         }
     }
 
@@ -149,6 +166,8 @@ const Register = () => {
                 </Container>
 
                 <Footer />
+
+                <ToastComponent color="bg-danger"  isOpen={toastIsOpen} message={toastMessage} />
             </main>
 
 
