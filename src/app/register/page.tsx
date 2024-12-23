@@ -16,6 +16,11 @@ const Register = () => {
     const [toastIsOpen, setToastIsOpen] = useState(false)
     const [toastMessage, setToastMessage] = useState("")
 
+    useEffect(()=>{
+        if(sessionStorage.getItem("auth-token")){
+            router.push("/home")
+        }
+    }, [])
 
 
     const handlerResgister = async (e: FormEvent<HTMLFormElement>) => {
@@ -60,7 +65,7 @@ const Register = () => {
         <>
             <Head>
                 <title>Onebitflix - Registro</title>
-                <link rel="shortcut icon" href="/favicon" type="image/x-icon" />
+                <link rel="shortcut icon" href="/favicon.svg" type="image/x-icon" />
                 <script src="https://jsuites.net/v4/jsuites.js"></script>
 
             </Head>
@@ -160,7 +165,7 @@ const Register = () => {
                                 className={styles.input} />
                         </FormGroup>
 
-                        <Button type="submit" outline className={styles.forBtn}>CADASTRAR</Button>
+                        <Button type="submit" outline className={styles.formBtn}>CADASTRAR</Button>
 
                     </Form>
                 </Container>
